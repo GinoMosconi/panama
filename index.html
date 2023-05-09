@@ -1,0 +1,77 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="initial-scale=1,user-scalable=no,maximum-scale=1,width=device-width">
+        <meta name="mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <link rel="stylesheet" href="css/leaflet.css">
+        <link rel="stylesheet" href="css/mapaweb.css"><link rel="stylesheet" href="css/fontawesome-all.min.css">
+        <style>
+        html, body, #map {
+            width: 100%;
+            height: 100%;
+            padding: 0;
+            margin: 0;
+        }
+        </style>
+        <title></title>
+    </head>
+    <body>
+        <div id="map">
+        </div>
+        
+        <script src="js/leaflet.js"></script>
+        <script src="js/leaflet.rotatedMarker.js"></script>
+        <script src="js/leaflet.pattern.js"></script>
+        <script src="js/leaflet-hash.js"></script>
+        <script src="js/Autolinker.min.js"></script>
+        <script src="js/rbush.min.js"></script>
+        <script src="js/labelgun.min.js"></script>
+        <script src="js/labels.js"></script>
+        <script src="js/leaflet-tilelayer-wmts.js"></script>
+        <script>
+        var map = L.map('map', {
+            zoomControl:true, maxZoom:28, minZoom:1
+        }).fitBounds([[6.378505587671697,-83.4517989381019],[10.496081481218795,-76.46264707069831]]);
+        var hash = new L.Hash(map);
+        var autolinker = new Autolinker({truncate: {length: 30, location: 'smart'}});
+        var bounds_group = new L.featureGroup([]);
+        function setBounds() {
+            map.setMaxBounds(map.getBounds());
+        }
+        map.createPane('pane_MapaBaseArcGIS_0');
+        map.getPane('pane_MapaBaseArcGIS_0').style.zIndex = 400;
+        var layer_MapaBaseArcGIS_0 = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+            pane: 'pane_MapaBaseArcGIS_0',
+            opacity: 1.0,
+            attribution: '',
+            minZoom: 1,
+            maxZoom: 28,
+            minNativeZoom: 0,
+            maxNativeZoom: 18
+        });
+        layer_MapaBaseArcGIS_0;
+        map.addLayer(layer_MapaBaseArcGIS_0);
+        map.createPane('pane_fondo_aa_con_mar_cog_tif_1');
+        map.getPane('pane_fondo_aa_con_mar_cog_tif_1').style.zIndex = 401;
+        var layer_fondo_aa_con_mar_cog_tif_1 = L.tileLayer.wmts('https://tiles.arcgis.com/tiles/UYEK9SUzH1am9mbk/arcgis/rest/services/fondo_aa_con_mar_cog_tif/MapServer/WMTS', {
+            pane: 'pane_fondo_aa_con_mar_cog_tif_1',
+            layer: 'fondo_aa_con_mar_cog_tif',
+            tilematrixSet: 'default028mm',
+            format: 'image/jpgpng',
+            style: 'default',
+            uppercase: true,
+            transparent: true,
+            continuousWorld : true,
+            opacity: 1.0,
+            attribution: '',
+        });
+        map.addLayer(layer_fondo_aa_con_mar_cog_tif_1);
+        var baseMaps = {};
+        L.control.layers(baseMaps,{"fondo_aa_con_mar_cog_tif": layer_fondo_aa_con_mar_cog_tif_1,"Mapa Base ArcGIS": layer_MapaBaseArcGIS_0,}).addTo(map);
+        setBounds();
+        </script>
+    </body>
+</html>
